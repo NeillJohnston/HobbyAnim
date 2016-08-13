@@ -1,0 +1,60 @@
+EXEC
+This is the file where I'll document project style, goals, and framework.
+Much like a readme, but more oriented for the developer.
+
+===
+
+STYLE
+
+    Indentation: 4 spaces. I'm too lazy to change the editor defaults.
+    Parentheses: Right next to the keyword. functionName(), if(), while(), etc.
+    Brackets: 1 whitespace line in between significant parts of the code and when changing indentation - for example:
+        class MyClass {
+
+            // variable declaration
+
+            MyClass() {
+
+                // code
+                // more code
+
+            }
+
+            void myFunction() {
+
+                // code
+                // more code
+
+            }
+
+        }
+        Seems excessive, but your eyes will thank you in the future probably.
+    Commenting: JavaDoc comments for every method and constructor. Regular comments throughout for explanation, only
+        before whitespace. @author, @version on every file that the class/interface/enum header. @version on any
+        significant method. Also, Javadoc on blocks of variables.
+
+GOALS
+
+    The old animator project (titled Animator) failed a bit due to its lack of focus. This one includes an EXEC file,
+    which is surely a step in the right direction.
+
+    My primary goal is completion - I believe that creating a new software for animation will be a great utility and help
+    to myself and other hobby animators who can't effectively use the alternatives.
+
+    My secondary goal is neatness - programmers say that there isn't such thing as perfect and neat code, and this isn't
+    an act of defiance but I definitely want to test the waters when working on my first major project. That also means
+    committing more to Git, and managing branches when I just want to try something, which I failed to do last time.
+
+    My tertiary goal is consistency - one of my personal main problems while designing programs has been flipping back
+    and forth between what I want my coding stlye to be. EXEC will help manage that, ideally.
+
+    My quaternary goal is to stop being so idealist.
+
+FRAMEWORK
+
+    (The actual workings of the project.)
+
+    HobbyAnim.class
+
+        Main class that the entire program can refer to. Will contain methods for managing undo/redo as well as a host
+        of constant variables. It extends JFrame and is the main window of the program.
