@@ -7,8 +7,11 @@ Much like a readme, but more oriented for the developer.
 STYLE
 
     Indentation: 4 spaces. I'm too lazy to change the editor defaults.
+
     Parentheses: Right next to the keyword. functionName(), if(), while(), etc.
+
     Brackets: 1 whitespace line in between significant parts of the code and when changing indentation - for example:
+        //
         class MyClass {
 
             // variable declaration
@@ -28,10 +31,26 @@ STYLE
             }
 
         }
+        //
         Seems excessive, but your eyes will thank you in the future probably.
+        As for tiny methods like getters and one-line methods, those can all stay in one line like so:
+        //
+        /**
+         * JavaDoc comment for this method.
+         */
+        Object getObject() { return myObject; }
+        //
+        East enough.
+
     Commenting: JavaDoc comments for every method and constructor. Regular comments throughout for explanation, only
         before whitespace. @author, @version on every file that the class/interface/enum header. @version on any
-        significant method. Also, Javadoc on blocks of variables.
+        significant method.
+        Also, Javadoc on blocks of variables.
+        For extremely significant sections of code, head them with a title comment:
+            //
+            // --- Title ---
+            //
+        ...
 
 GOALS
 
@@ -56,5 +75,16 @@ FRAMEWORK
 
     HobbyAnim.class
 
-        Main class that the entire program can refer to. Will contain methods for managing undo/redo as well as a host
+        Main class that the entire program can refer to. Will contain methods for managing undo/execute as well as a host
         of constant variables. It extends JFrame and is the main window of the program.
+
+    CanvasPanel.class
+
+        Drawing area.
+
+        CanvasPanelAdapter
+
+    CursorTool.class
+
+        Performs actions based on what tool is currently in use.
+        It is an enum with a constructor, with arguments for 1. the UndoCommand created by a mouse release.
