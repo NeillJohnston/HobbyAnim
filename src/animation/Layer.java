@@ -10,6 +10,6 @@ import java.util.HashMap;
  */
 public abstract class Layer extends HashMap<Long, KeyFrame> {
 
-    
+    // Reminder: java.awt.geom exists.
 
 }

@@ -88,3 +88,7 @@ FRAMEWORK
 
         Performs actions based on what tool is currently in use.
         It is an enum with a constructor, with arguments for 1. the UndoCommand created by a mouse release.
+
+    .vector
+
+        Package for vector graphics. Includes typical pen strokes, lines, etc.

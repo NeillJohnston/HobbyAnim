@@ -2,6 +2,7 @@ package framework;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +16,33 @@ public enum CursorTool {
 
     // --- Enum types ---
 
-    DEFAULT(new TrackCommand() {
+    DEFAULT(new Tracker() {
+
+        /**
+         *
+         *
+         * @param p     Point2D object to track
+         */
+        @Override
+        public void startTrack(Point2D p) {}
+
+        /**
+         *
+         *
+         * @param p
+         */
+        @Override
+        public void updateTrack(Point2D p) {}
+
+        /**
+         *
+         *
+         * @param p
+         */
+        @Override
+        public void endTrack(Point2D p) {}
+
+    }, new TrackCommand() {
 
         /**
          * ...
@@ -23,7 +50,7 @@ public enum CursorTool {
          * @param track     Data taken from tracking a mouse stroke
          */
         @Override
-        public void constructWithTrack(ArrayList<Point> track) {}
+        public void constructWithTrack(ArrayList<Point2D> track) {}
 
         /**
          * ...
@@ -38,7 +65,33 @@ public enum CursorTool {
         public void execute() {}
 
     }),
-    LINE(new TrackCommand() {
+    LINE(new Tracker() {
+
+        /**
+         *
+         *
+         * @param p     Point2D object to track
+         */
+        @Override
+        public void startTrack(Point2D p) {}
+
+        /**
+         *
+         *
+         * @param p
+         */
+        @Override
+        public void updateTrack(Point2D p) {}
+
+        /**
+         *
+         *
+         * @param p
+         */
+        @Override
+        public void endTrack(Point2D p) {}
+
+    }, new TrackCommand() {
 
         /**
          *
@@ -46,7 +99,7 @@ public enum CursorTool {
          * @param track     Data taken from tracking a mouse stroke
          */
         @Override
-        public void constructWithTrack(ArrayList<Point> track) {
+        public void constructWithTrack(ArrayList<Point2D> track) {
 
             // TODO Store information for this line.
 
@@ -73,14 +126,40 @@ public enum CursorTool {
         }
 
     }),
-    DEBUG(new TrackCommand() {
+    DEBUG(new Tracker() {
+
+        /**
+         *
+         *
+         * @param p     Point2D object to track
+         */
+        @Override
+        public void startTrack(Point2D p) {}
+
+        /**
+         *
+         *
+         * @param p
+         */
+        @Override
+        public void updateTrack(Point2D p) {}
+
+        /**
+         *
+         *
+         * @param p
+         */
+        @Override
+        public void endTrack(Point2D p) {}
+
+    }, new TrackCommand() {
         /**
          *
          *
          * @param track     Data taken from tracking a mouse stroke
          */
         @Override
-        public void constructWithTrack(ArrayList<Point> track) {}
+        public void constructWithTrack(ArrayList<Point2D> track) {}
 
         /**
          *
@@ -92,8 +171,13 @@ public enum CursorTool {
          *
          */
         @Override
-        public void execute() { System.out.println("Command executed."); }
-    })
+        public void execute() {
+
+            System.out.println("Command executed.");
+
+        }
+
+    }),
     ;
 
     // --- Construction and use of enum ---
@@ -101,20 +185,22 @@ public enum CursorTool {
     /**
      * Commands used by this cursor tool from the constructor.
      */
+    private Tracker cursorTracker;
     private TrackCommand execOnRelease;
 
     /**
      * Stroke track technology, will be null unless tracking is being performed.
      */
-    private ArrayList<Point> track;
+    private ArrayList<Point2D> track;
 
     /**
      * Construct a cursor.
      *
      * @param execOnRelease     UndoCommand to be created when the mouse is released after a performing a stroke
      */
-    CursorTool(TrackCommand execOnRelease) {
+    CursorTool(Tracker cursorTracker, TrackCommand execOnRelease) {
 
+        this.cursorTracker = cursorTracker;
         this.execOnRelease = execOnRelease;
         this.track = null;
 
@@ -182,11 +268,11 @@ public enum CursorTool {
          *
          * @param track     Data taken from tracking a mouse stroke
          */
-        public void constructWithTrack(ArrayList<Point> track);
+        public void constructWithTrack(ArrayList<Point2D> track);
 
     }
 
-    // --- Helper interface Tracker ---
+    // --- Helper class Tracker ---
 
     /**
      * Tracker is an object that follows the cursor and updates when it moves.
@@ -194,13 +280,13 @@ public enum CursorTool {
     private interface Tracker {
 
         /**
-         * Same tracking methods as in CursorTool.
+         * Tracking methods.
          *
-         * @param p
+         * @param p     Point2D object to track
          */
-        public void startTrack(Point p);
-        public void updateTrack(Point p);
-        public void endTrack(Point p);
+        public void startTrack(Point2D p);
+        public void updateTrack(Point2D p);
+        public void endTrack(Point2D p);
 
     }
 
