@@ -40,7 +40,7 @@ public class Line extends VectorComponent {
     @Override
     public void paint(Graphics2D g2d) {
 
-
+        // TODO Paint a ~fucking house~ line.
 
     }
 

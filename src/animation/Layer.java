@@ -1,5 +1,7 @@
 package animation;
 
+import framework.CanvasElement;
+
 import java.util.HashMap;
 
 /**
@@ -10,6 +12,13 @@ import java.util.HashMap;
  */
 public abstract class Layer extends HashMap<Long, KeyFrame> {
 
-    // Reminder: java.awt.geom exists.
+    /**
+     * Default constructor.
+     */
+    public Layer() {
+
+        super();
+
+    }
 
 }

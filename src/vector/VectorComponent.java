@@ -17,7 +17,7 @@ public abstract class VectorComponent implements CanvasElement {
     /**
      * Unique long ID for this element.
      */
-    private long id;
+    protected long id;
 
     /**
      * Geometric construction variables.
@@ -40,6 +40,8 @@ public abstract class VectorComponent implements CanvasElement {
      *
      * @return  id
      */
-    public long getID() { return id; }
+    public long getId() { return id; }
+
+    public void setId(long id) { this.id = id; };
 
 }

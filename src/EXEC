@@ -11,7 +11,7 @@ STYLE
     Parentheses: Right next to the keyword. functionName(), if(), while(), etc.
 
     Brackets: 1 whitespace line in between significant parts of the code and when changing indentation - for example:
-        //
+        ~
         class MyClass {
 
             // variable declaration
@@ -39,7 +39,7 @@ STYLE
          * JavaDoc comment for this method.
          */
         Object getObject() { return myObject; }
-        //
+        ~
         East enough.
 
     Commenting: JavaDoc comments for every method and constructor. Regular comments throughout for explanation, only
@@ -47,10 +47,10 @@ STYLE
         significant method.
         Also, Javadoc on blocks of variables.
         For extremely significant sections of code, head them with a title comment:
-            //
+            ~
             // --- Title ---
-            //
-        ...
+            ~
+        Special note: anonymous classes do not need full JavaDoc comments.
 
 GOALS
 
@@ -65,7 +65,7 @@ GOALS
     committing more to Git, and managing branches when I just want to try something, which I failed to do last time.
 
     My tertiary goal is consistency - one of my personal main problems while designing programs has been flipping back
-    and forth between what I want my coding stlye to be. EXEC will help manage that, ideally.
+    and forth between what I want my coding style to be. EXEC will help manage that, ideally.
 
     My quaternary goal is to stop being so idealist.
 
@@ -92,3 +92,10 @@ FRAMEWORK
     .vector
 
         Package for vector graphics. Includes typical pen strokes, lines, etc.
+
+    .animation
+
+        Package that contains animation-specific components: layers and keyframes, basically.
+        Layer and KeyFrame in .animation both have specialized overloaded ways of using HashMap.put. Instead of taking
+        a K and V argument and returning the value, the new put method takes in only a value, auto-generates the key,
+        and returns the key. This is to help the UndoCommands that run the program.

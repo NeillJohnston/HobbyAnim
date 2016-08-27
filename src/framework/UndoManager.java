@@ -35,12 +35,10 @@ public class UndoManager {
      */
     public void add(UndoCommand uc) {
 
-        if(stackIndex != stack.size() - 1)
-
-            stack = (ArrayList<UndoCommand>) stack.subList(0, stackIndex);
-
-        stack.add(uc);
         stackIndex++;
+        // If not at the end of the stack, trim the top of the stack and then add the new UndoCommand.
+        if(stackIndex < stack.size()) stack.removeAll(stack.subList(stackIndex, stack.size()));
+        stack.add(uc);
 
     }
 
@@ -50,10 +48,15 @@ public class UndoManager {
     public void undo() {
 
         // Make sure the stack has something to undo.
-        if(stack.get(stackIndex) != null) {
+        try {
 
             stack.get(stackIndex).undo();
             stackIndex--;
+            HobbyAnim.canvas.repaint();
+
+        } catch(ArrayIndexOutOfBoundsException e) {
+
+            System.err.println("Attempting to undo with a blank stack.");
 
         }
 
@@ -65,10 +68,15 @@ public class UndoManager {
     public void redo() {
 
         // Make sure the stack has something to redo.
-        if(stack.get(stackIndex + 1) != null) {
+        try {
 
+            stack.get(stackIndex + 1).execute();
             stackIndex++;
-            stack.get(stackIndex).execute();
+            HobbyAnim.canvas.repaint();
+
+        } catch(ArrayIndexOutOfBoundsException e) {
+
+            System.err.println("Attempting to redo at end of stack.");
 
         }
 

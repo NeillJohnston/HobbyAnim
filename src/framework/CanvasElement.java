@@ -22,6 +22,13 @@ public interface CanvasElement {
      *
      * @return id
      */
-    public long getID();
+    public long getId();
+
+    /**
+     * Set this element's unique long ID.
+     *
+     * @param id    The Id.
+     */
+    public void setId(long id);
 
 }
