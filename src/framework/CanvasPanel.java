@@ -7,7 +7,6 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 
 /**
  * CanvasPanel is the window part that can be drawn in.
@@ -43,7 +42,20 @@ public class CanvasPanel extends JPanel {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        for(CanvasElement ce : HobbyAnim.getCurrentFrame().values()) ce.paint(g2d);
+        KeyFrame onionFrame = HobbyAnim.getFrameAt(HobbyAnim.currentLayerId, HobbyAnim.currentPosition - 1);
+        if(onionFrame != null) {
+
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
+            for(CanvasElement ce : onionFrame.values()) ce.paint(g2d);
+
+        }
+        g2d.setComposite(AlphaComposite.Src);
+
+        if(HobbyAnim.getCurrentFrame() != null)
+
+            for(CanvasElement ce : HobbyAnim.getCurrentFrame().values()) ce.paint(g2d);
+
+
         HobbyAnim.cursor.paint(g2d);
 
     }
@@ -75,6 +87,8 @@ public class CanvasPanel extends JPanel {
          */
         @Override
         public void mousePressed(MouseEvent e) {
+
+            requestFocusInWindow();
 
             if(SwingUtilities.isLeftMouseButton(e)) {
 

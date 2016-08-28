@@ -1,7 +1,6 @@
 package tool;
 
 import framework.CanvasElement;
-import framework.CanvasPanel;
 import framework.CursorTool;
 import framework.HobbyAnim;
 import vector.VectorComponent;
@@ -68,7 +67,7 @@ public class DebugTool extends CursorTool {
 
                 this.track = track;
                 final ArrayList<Point2D> passTrack = track;
-                this.ce = new VectorComponent(0L) {
+                this.ce = new VectorComponent() {
 
                     @Override
                     public void paint(Graphics2D g2d) {

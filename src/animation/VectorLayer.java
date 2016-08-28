@@ -18,17 +18,14 @@ public class VectorLayer extends Layer {
     };
 
     /**
-     * Override put method so that the KeyFrame is wrapped as a VectorFrame.
+     * Insert a new VectorFrame.
      *
-     * @param key       frame position
-     * @param value     KeyFrame to add
-     * @return whatever super.put(K, V) does
+     * @param position  frame position (timeline)
      */
     @Override
-    public KeyFrame put(Long key, KeyFrame value) {
+    public void newFrame(long position) {
 
-        return super.put(key, value);
+        put(position, new VectorFrame());
 
     }
-
 }

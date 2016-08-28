@@ -104,7 +104,7 @@ public abstract class CursorTool {
      */
     public void paint(Graphics2D g2d) {
 
-        // TODO add painting code.
+        // Fill in with custom code.
 
     }
 

@@ -30,7 +30,7 @@ public class Line extends VectorComponent {
      */
     public Line(long id, Color color, int brushSize, Point2D firstNode) {
 
-        super(id);
+        super();
         this.color = color;
         this.brushSize = brushSize;
         this.nodes.add(firstNode);

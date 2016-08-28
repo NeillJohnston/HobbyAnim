@@ -21,4 +21,15 @@ public abstract class Layer extends HashMap<Long, KeyFrame> {
 
     }
 
+    /**
+     * Create a new frame.
+     *
+     * @param position  frame position (timeline)
+     */
+    public void newFrame(long position) {
+
+        put(position, new KeyFrame() {});
+
+    }
+
 }

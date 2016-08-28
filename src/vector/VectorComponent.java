@@ -28,9 +28,9 @@ public abstract class VectorComponent implements CanvasElement {
     /**
      * Default constructor.
      */
-    public VectorComponent(long id) {
+    public VectorComponent() {
 
-        this.id = id;
+        this.id = -1L;
         nodes = new ArrayList<>();
 
     }

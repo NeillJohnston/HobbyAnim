@@ -74,7 +74,7 @@ public class UndoManager {
             stackIndex++;
             HobbyAnim.canvas.repaint();
 
-        } catch(ArrayIndexOutOfBoundsException e) {
+        } catch(IndexOutOfBoundsException e) {
 
             System.err.println("Attempting to redo at end of stack.");
 
