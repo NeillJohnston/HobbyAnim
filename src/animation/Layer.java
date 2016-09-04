@@ -1,6 +1,8 @@
 package animation;
 
 import framework.CanvasElement;
+import framework.HobbyAnim;
+import framework.UndoCommand;
 
 import java.util.HashMap;
 

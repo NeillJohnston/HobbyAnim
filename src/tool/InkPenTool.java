@@ -54,7 +54,9 @@ public class InkPenTool extends CursorTool {
                             for(Point2D p : track_.subList(1, track_.size() - 1)) {
 
                                 // Get the width of this part of the stroke as a function of its distance from the last point.
-                                float calcWidth = width - Math.min(width - 1, (float) p.distance(last) / 4);
+                                // TODO Get rid of magic numbers.
+                                float minDWidth = (float) Math.max(width * .75, 1.0F);
+                                float calcWidth = width - Math.min(minDWidth, (float) p.distance(last) / 4);
 
                                 g2d.setStroke(new BasicStroke(calcWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
                                 g2d.setColor(foreground);
@@ -104,7 +106,9 @@ public class InkPenTool extends CursorTool {
             for(Point2D p : track.subList(1, track.size() - 1)) {
 
                 // Get the width of this part of the stroke as a function of its distance from the last point.
-                float calcWidth = HobbyAnim.width - Math.min(HobbyAnim.width - 1, (float) p.distance(last) / 4);
+                // TODO Get rid of magic numbers, pt. II.
+                float minDWidth = (float) Math.max(HobbyAnim.width * .75, 1.0F);
+                float calcWidth = HobbyAnim.width - Math.min(minDWidth, (float) p.distance(last) / 4);
 
                 g2d.setStroke(new BasicStroke(calcWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
                 g2d.setColor(HobbyAnim.foreground);

@@ -16,15 +16,14 @@ import java.awt.event.MouseEvent;
  */
 public class CanvasPanel extends JPanel {
 
-
-
     /**
      * Default constructor for CanvasPanel. Initializes some basic settings.
      */
     public CanvasPanel() {
 
         super();
-        setBorder(new LineBorder(Color.BLACK, 1));
+        setBackground(Color.WHITE);
+        setBorder(new LineBorder(Color.WHITE, 1));
 
         // Add the custom mouse adapter.
         CanvasPanelAdapter cpa = new CanvasPanelAdapter(this);
@@ -41,15 +40,6 @@ public class CanvasPanel extends JPanel {
 
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-
-        KeyFrame onionFrame = HobbyAnim.getFrameAt(HobbyAnim.currentLayerId, HobbyAnim.currentPosition - 1);
-        if(onionFrame != null) {
-
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
-            for(CanvasElement ce : onionFrame.values()) ce.paint(g2d);
-
-        }
-        g2d.setComposite(AlphaComposite.Src);
 
         if(HobbyAnim.getCurrentFrame() != null)
 

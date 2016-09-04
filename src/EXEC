@@ -1,6 +1,7 @@
 EXEC
 This is the file where I'll document project style, goals, and framework.
 Much like a readme, but more oriented for the developer.
+NOTE TO SELF: It's not a clusterfuck if everything is there for a reason.
 
 ===
 
@@ -45,7 +46,10 @@ STYLE
     Commenting: JavaDoc comments for every method and constructor. Regular comments throughout for explanation, only
         before whitespace. @author, @version on every file that the class/interface/enum header. @version on any
         significant method.
-        Also, Javadoc on blocks of variables.
+        Also, Javadoc on blocks of variables - if small enough, use a single-line Javadoc comment.
+            ~
+            /** Single-line Javadoc comment. */
+            ~
         For extremely significant sections of code, head them with a title comment:
             ~
             // --- Title ---

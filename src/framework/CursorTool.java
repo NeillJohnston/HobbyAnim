@@ -78,7 +78,8 @@ public abstract class CursorTool {
         track.add(p);
         TrackCommand execOnRelease = createCommand();
         execOnRelease.constructWithTrack(track);
-        execOnRelease.execute();
+        try { execOnRelease.execute(); }
+        catch(NullPointerException err) { System.out.print("Cannot draw on non-existent frame\n"); }
         HobbyAnim.undoManager.add(execOnRelease);
 
         track = null;

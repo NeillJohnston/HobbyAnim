@@ -3,16 +3,19 @@ package framework;
 import animation.KeyFrame;
 import animation.Layer;
 import animation.VectorLayer;
+import icon.GlobalIcon;
+import tool.DebugTool;
 import tool.InkPenTool;
 
 import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * HobbyAnim is the main class that the entire program can refer to. Will contain methods for managing undo/execute as well
@@ -23,34 +26,26 @@ import java.util.HashMap;
  */
 public class HobbyAnim extends JFrame {
 
-    // <editor-fold desc="">
-
-    /**
-     * Window defaults.
-     */
+    /** Window defaults. */
     private final static String WINDOW_NAME = "HobbyAnim";
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
-    /**
-     * Swing components and other important static objects that comprise the window.
-     */
+    /** Swing components and other important static objects that comprise the window. */
     public static HobbyAnim main;
     public static CanvasPanel canvas;
     public static ToolOptionsPanel toolOptions;
+    public static OverviewPanel overview;
     public static CursorTool cursor;
     public static UndoManager undoManager;
 
-    /**
-     * Layer variables.
-     */
+    /** Layer variables. */
     public static HashMap<Long, Layer> layers;
+    public static ArrayList<Long> layerOrder;
     public static long currentLayerId;
     public static long currentPosition;
 
-    /**
-     * Tool options.
-     */
+    /** Tool options. */
     public static Color foreground;
     public static Color background;
     public static float width;
@@ -64,12 +59,16 @@ public class HobbyAnim extends JFrame {
      * move the position one up and repeat.
      * nextFrameAction: Increase the position by 1, if possible.
      * prevFrameAction: Decrease the position by 1, if possible.
+     * toolDebugAction: Testing, switches to debug tool.
+     * toolInkpenAction: Switches to inkpen tool.
      */
     public static AbstractAction undoAction;
     public static AbstractAction redoAction;
     public static AbstractAction newFrameAction;
     public static AbstractAction nextFrameAction;
     public static AbstractAction prevFrameAction;
+    public static AbstractAction toolDebugAction;
+    public static AbstractAction toolInkpenAction;
 
     /**
      * Action string constants (should be one per action above).
@@ -79,6 +78,7 @@ public class HobbyAnim extends JFrame {
     public static final String NEW_FRAME_ACTION = "newFrameAction";
     public static final String NEXT_FRAME_ACTION = "nextFrameAction";
     public static final String PREV_FRAME_ACTION = "prevFrameAction";
+    public static final String TOOL_INKPEN_ACTION = "toolInkpenAction";
 
     /**
      * Default constructor for HobbyAnim, initializes all the typical settings.
@@ -89,21 +89,6 @@ public class HobbyAnim extends JFrame {
         setTitle(WINDOW_NAME);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-
-        // Create and add the other framework parts.
-        canvas = new CanvasPanel();
-        add(canvas, BorderLayout.CENTER);
-        toolOptions = new ToolOptionsPanel();
-        add(toolOptions, BorderLayout.WEST);
-        cursor = new InkPenTool();
-        undoManager = new UndoManager();
-
-        // Default layer variables.
-        currentLayerId = 0L;
-        currentPosition = 0L;
-        layers = new HashMap<>();
-        layers.put(currentLayerId, new VectorLayer());
-        getCurrentLayer().newFrame(currentPosition);
 
         // Default tool options.
         foreground = Color.BLACK;
@@ -144,6 +129,8 @@ public class HobbyAnim extends JFrame {
                 uc.execute();
                 undoManager.add(uc);
                 canvas.repaint();
+                overview.revalidate();
+                overview.repaint();
 
             }
 
@@ -155,6 +142,8 @@ public class HobbyAnim extends JFrame {
 
                 currentPosition++;
                 canvas.repaint();
+                overview.revalidate();
+                overview.repaint();
 
             }
 
@@ -166,11 +155,24 @@ public class HobbyAnim extends JFrame {
 
                 if(currentPosition > 0) currentPosition--;
                 canvas.repaint();
+                overview.revalidate();
+                overview.repaint();
 
             }
 
         };
-        // endregion
+        toolDebugAction = new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) { HobbyAnim.cursor = new DebugTool(); }
+
+        };
+        toolInkpenAction = new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) { HobbyAnim.cursor = new InkPenTool(); }
+
+        };
 
         InputMap im = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), UNDO_ACTION);
@@ -186,12 +188,65 @@ public class HobbyAnim extends JFrame {
         am.put(NEXT_FRAME_ACTION, nextFrameAction);
         am.put(PREV_FRAME_ACTION, prevFrameAction);
 
+        // Create and add the other framework parts.
+        canvas = new CanvasPanel();
+        add(canvas, BorderLayout.CENTER);
+        toolOptions = new ToolOptionsPanel();
+        add(toolOptions, BorderLayout.WEST);
+        overview = new OverviewPanel();
+        add(overview, BorderLayout.SOUTH);
+        cursor = new InkPenTool();
+        undoManager = new UndoManager();
+
+        // Default layer variables.
+        currentLayerId = 0L;
+        currentPosition = 0L;
+        layers = new HashMap<Long, Layer>() {
+
+            /**
+             * Override put to make sure layerOrder is updated when layers is and update the current layer ID.
+             * // JANKY The currentLayerId is updated to whatever layer was just created, allowing for 1. auto-switching
+             * to the newly created layer and 2. retrieving the layer ID for use in commands. Two-birds-one-stone, but
+             * damn is that stone ghetto.
+             *
+             * @param key
+             * @param value
+             * @return
+             */
+            @Override
+            public Layer put(Long key, Layer value) {
+
+                while(layers.containsKey(key)) key++;
+                layerOrder.add(key);
+                currentLayerId = key;
+                return super.put(key, value);
+
+            }
+
+            /**
+             * Override remove to make sure layerOrder is updated when layers is.
+             *
+             * @param key
+             * @return
+             */
+            @Override
+            public Layer remove(Object key) {
+
+                layerOrder.remove(key);
+                return super.remove(key);
+
+            }
+        };
+        layerOrder = new ArrayList<>();
+        new VectorLayer.NewVectorLayerCommand().execute();
+        getCurrentLayer().newFrame(currentPosition);
+
         // Create and add the menu bar.
         JMenuBar menuBar = new JMenuBar();
 
             JMenu editMenu = new JMenu("Edit");
 
-                JMenuItem undoEditMenu = new JMenuItem("Undo");
+                JMenuItem undoEditMenu = new JMenuItem("Undo", new GlobalIcon().loadMenuIcon(GlobalIcon.UNDO));
                 undoEditMenu.addActionListener(new ActionListener() {
 
                     @Override
@@ -200,7 +255,7 @@ public class HobbyAnim extends JFrame {
                 });
                 editMenu.add(undoEditMenu);
 
-                JMenuItem redoEditMenu = new JMenuItem("Redo");
+                JMenuItem redoEditMenu = new JMenuItem("Redo", new GlobalIcon().loadMenuIcon(GlobalIcon.REDO));
                 redoEditMenu.addActionListener(new ActionListener() {
 
                     @Override
